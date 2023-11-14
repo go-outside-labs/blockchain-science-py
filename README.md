@@ -26,7 +26,7 @@
 
 <br>
 
-* **[magick-py, a simple pir CLI tool](magick-py/):**
+* **[magick-py, a simple private information retrieval CLI tool](magick-py/):**
   * learn and run experiments to understand **zero-knowledge private information retrieval** through step-by-step mathematical calculations.
 
 <br>
