@@ -3,8 +3,8 @@
 <br>
 <br>
 
-* **Ongoing library for PIR and LWE experiments in Python. To learn more, check the [Mirror write-up about this project](https://mirror.xyz/steinkirch.eth/4G5bsqUkjLxhQ0M9so3f25o4cABwN--tC40N3jkReug).**
-* **This work is based on [*"Simple and Fast Single-Server Private Information Retrieval"*,  by A. Henzinger et al.](https://eprint.iacr.org/2022/949.pdf)**
+* **cli for single server PIR and LWE experiments in python, based on [*"simple and fast single-server private information retrieval"*,  by a. henzinger et al.](https://eprint.iacr.org/2022/949.pdf)**
+* **to learn more, check my [mirror write-up about this project](https://mirror.xyz/steinkirch.eth/4G5bsqUkjLxhQ0M9so3f25o4cABwN--tC40N3jkReug).**
 
 <br>
 
@@ -20,19 +20,22 @@
 
 ----
 
-### Intro to PIR
+### intro to PIR
 
-**Private Information Retrieval** (PIR) refers to the ability to query a database without revealing which item is looked up or whether it exists. Among applications of interest are: law enforcement, health providers, banks, stock exchanges, and many others.
+private information retrieval (PIR) was first introduced in 1995 by **b. chor et al.** and refers to the ability to query a database without revealing which item is looked up or whether it exists, by using cryptography primitives.
 
-In the simplest setup, we have a server that holds an embedded database, and we have a client that holds an index `i` between `1` and `n`. The client wants to privately read the `ith` database item by interacting with a server following a PIR protocol, *i.e.*, without letting the server learn anything about the index `i` that the client is reading.
+this is actually pretty cool, think about it: once PIR becomes less expensive or prohibitive (i.e., cheaper computation with a small cipher, as PIR inherently has a high cost for server-side computation), some of the possible fields and applications that could utilize the protocol are, for example, law enforcement, safe browsing, health providers, banks, stock exchanges…
 
-PIR schemes are generally divided into **single server schemes** and **multiple server schemes** (when you remove the trust of a subset of the servers). For now, we are working with a vanilla setup for a simple single server. This CLI tool sets successive small experiments diving into the moving pieces until a final PIR experiment, where the “database” is represented by a square matrix whose elements are under a modulo constant.
+
+PIR schemes are generally divided into single-server schemes and multiple-server schemes (which allows you to remove the trust from a subset of the servers). we will only be looking at the first today. 
+
+our vanilla single-server PIR protocol setup is very simple: a server holds an embedded database `D` represented by a `n x n` square matrix (whose elements are under a constant modulo), and a client wants to privately read the `ith` database item (`Di`, with `n` elements) without letting the server learn about `i`.
 
 <br>
 
-### Lattice-based Cryptography
+### lattice-based cryptography
 
-**Lattice-based cryptography** refers to a series of quantum-resistant cryptographic primitives that involve lattices, either in their construction or in the security proof.
+**lattice-based cryptography** refers to a series of quantum-resistant cryptographic primitives that involve lattices, either in their construction or in the security proof.
 
 
 > 💡 *In group theory, a lattice in the R^n is an infinite set of points in this space in which coordinate-wise addition or subtraction of two points produces another point, so every point in the space is within some maximum distance of any lattice point. A lattice can also be described as a free abelian (commutative) group of dimension n, spanning the vector space R^n; or the symmetry group of a discrete translation symmetry in n directions.*
@@ -40,40 +43,52 @@ PIR schemes are generally divided into **single server schemes** and **multiple 
 
 <br>
 
-### Fully Homomorphic Encryption
+### homomorphic encryption
 
 
+before we start, we need to review the concept of homomorphic encryption.
 
-To understand homomorphism, think of an example of a server that can `XOR` a client’s data. The client could send their cipher `c0`, obtained from their plaintext data `m0` and their key `k0`,
+imagine a server that can `XOR` some client’s data. the client would send their cipher `c0`, obtained from their plaintext data `m0` and their key `k0`:
 
 ```
 c = m0 ⌖ k0
 ```
 
-**Homomorphism** comes from the fact that if a client sends two encrypted messages, say `c1` and `c2` (from messages `m0` and `m1`, respectively), the server can return `c1 ⌖ c2` so that the client can then retrieve `m0 ⌖ m1`.
+homomorphism is the property that if a client sends two encrypted messages, `c1` and `c2` (from messages `m0` and `m1`, respectively), the server can return `c1 ⌖ c2` so the client can retrieve `m0 ⌖ m1`.
 
-**Partially homomorphic encryption** is easily achieved as it can accept the possibility of not all the data being encrypted, or homomorphic through other operations (such as multiplication). **Fully homomorphic encryption (FHE)** is achieved when a server operates on encrypted data without seeing any content of the data (or if the data exists at all).
+partially homomorphic encryption can be easily achieved as it can accept the possibility of not all the data being encrypted (or homomorphic) through other operations (such as multiplication).
 
-In a **[quintessential paper in 2005](https://dl.acm.org/doi/10.1145/1060590.1060603)**, Oded Regev introduced the first lattice-based public-key encryption scheme, and the **learning with errors** (LWE) problem. 
-
-The LWE problem can be thought of as a search in a **noisy modular set of equations** whose solutions can be very difficult to solve. For instance, given `m` samples of coefficients `(bi, ai)` in the linear equation `bi = <ai, s> + ei`, with the error `ei` sampled from a small range `[-bound, bound]`, the problem of finding the secret key `s` is hard.
-
-In the last years, research has been done to improve Regev's security proof and the efficiency of the scheme, including Craig Gentry's 2009 **first fully homomorphic encryption scheme**.
+fully homomorphic encryption (FWE) is hard and it would be achieved if a server operated on encrypted data without seeing ANY content of the data.
 
 <br>
 
-> 💡 *In a more formal definition, homomorphic encryption is a form of encryption with evaluation capability for computing over encrypted data without access to the secret key, i.e., it supports arbitrary computation on ciphers. fully homomorphic encryption is the evaluation of arbitrary circuits of multiple types of (unbounded depth) gates.*
+> 💡 *in a more formal definition, homomorphic encryption is a form of encryption with evaluation capability for computing over encrypted data without access to the secret key, i.e., supporting arbitrary computation on ciphers. fully homomorphic encryption could be defined as the evaluation of arbitrary circuits of multiple types of (unbounded depth) gates (relevant to zero-knowledge proof setups).*
 
 <br>
 
-### Single-server setup with a square matrix representation
+### learning with errors (LWE)
 
-The basic gist of these experiments is:
+a subsequent important progress in the the field was a seminal  paper in 2005, where oded regev introduced the first lattice-based public-key encryption scheme, and the learning with errors (LWE) problem.
 
-  * a *single-server* database is represented by a square matrix `(m x m)`
-  * our query is represented by a vector filled by 0s, except at the asking row and column `(m x 1)`
-  * the server retrieves the queried item by looping over every column and multiplying their values to the value in the same row of the query vector. then, by adding up the values for each column in its own matrix. the result has the same dimension as the query vector (*i.e.*, we reduce the space to the column where the data is located).
-  * finally, privacy is guaranteed by adding fully homomorphic encryption with respect to addition to the setup (i.e. additive homomorphism).
+the LWE problem can be thought of as a search in a (noisy) modular set of equations whose solutions can be very difficult to solve. in other words, given m samples of coefficients (bi, ai) in the linear equation bi = <ai, s> + ei, with the error ei sampled from a small range [-bound, bound], finding the secret key s is “hard”.
+
+in the past decades, regev's security proof and the LWE scheme's efficiency have been the subject of intense research among cryptographers, including craig gentry's thesis on the first fully homomorphic encryption scheme (2009).
+
+<br>
+
+
+
+<br>
+
+### single-server setup with a square matrix representation
+
+the basic gist of these experiments is:
+
+* our single-server database is represented by a square matrix (`n x n`)
+* our query is represented by a vector filled by `0s`, except at the asking row and column (`n x 1`)
+* the server retrieves the queried item by i) looping over every column and multiplying their values to the value in the same row of the query vector, and ii) adding the values found in each column in its own matrix.
+* the result should have the same dimension as the query vector (i.e., we reduce the space to the size of the column where the data is located).
+* finally, privacy is guaranteed by checking that fully homomorphic encryption is held with respect to addition in this setup (i.e. additive homomorphism).
 
 
 <br>
@@ -81,11 +96,11 @@ The basic gist of these experiments is:
 
 ----
 
-### Installation
+### installation
 
 <br>
 
-#### Install Requirements
+#### requirements
 
 ```
 python3 -m venv venv
@@ -94,10 +109,10 @@ make install_deps
 ```
 
 
-#### Set a `.env` file
+#### set a `.env` file
 
 
-Add config and LWE parameters to:
+add config and LWE parameters to:
 
 ```
 cp .env.example .env
@@ -112,17 +127,17 @@ LWE parameters needed are:
 * a work around the sampling errors (*i.e.*, the standard variation sigma of a Gaussian distribution with zero mean sigma) by setting a bound range for them
 
 
-To pick adequate parameters, you can use tools such as a [lattice estimator](https://github.com/malb/lattice-estimator).
+to pick adequate parameters, you can use tools such as a [lattice estimator](https://github.com/malb/lattice-estimator).
 
 
-#### Install Magick
+#### install 
 
 ```
 make install
 ```
 
 
-#### Test your installation
+#### test your installation
 
 ```
 magick
@@ -146,22 +161,24 @@ options:
 
 ----
 
-### Experiments
+### experiments
 
 <br>
 
 
 
-#### Simple linear encryption and decryption of a msg vector with a sampled error vector
+#### simple linear encryption and decryption of a msg vector with a sampled error vector
 
-In this simple experiment of learning with error (LWE), we operate our message vector over a ring modulo `mod`, so some information is lost. Luckily, Gussian elimination can still be used to recover the original message vector as it works over a ring modulo `mod`.
+in this simple experiment of learning with error (LWE), we operate our message vector over a ring modulo `mod`, so some information is lost. 
 
-The steps of this experiment are the following:
+luckily, gaussian elimination can still be used to recover the original message vector as it works over a ring modulo `mod`.
 
-1. Represent a message vector `m0` of size `m`, where each element has modulo `mod`.
-2. Encrypt this message with a simple `B = A * s + e + m0`, where `s` is the secret and `e` is the error vector.
-3. Set the ciphertext as the tuple `c = (B, A)`
-4. Decrypt `c = (B, A)` for a given `s`, such that `m1 = m0 + e`.
+the steps of this experiment are the following:
+
+1. represent a message vector `m0` of size `m`, where each element has modulo `mod`.
+2. encrypt this message with a simple `B = A * s + e + m0`, where `s` is the secret and `e` is the error vector.
+3. set the ciphertext as the tuple `c = (B, A)`
+4. decrypt `c = (B, A)` for a given `s`, such that `m1 = m0 + e`.
 
 <br>
 
@@ -194,14 +211,16 @@ bound: [-4, 4]
 
 ----
 
-#### Secret key Regev encryption by scaling a message vector
+#### secret key Regev encryption by scaling a message vector
 
 
-In this another simple example of learning with error (LWE), we lose information on the least significant bits by adding noise, *i.e.*, by scaling the message vector by `delta = mod / p` before adding it to encryption. Then, during the decryption, we scale the message vector back by `1 / delta`. 
+in this simple example of learning with error (LWE), we lose information on the least significant bits by adding noise, *i.e.*, by scaling the message vector by `delta = mod / p` before adding it to encryption. then, during the decryption, we scale the message vector back by `1 / delta`. 
 
-The scaling ensures that `m` is in the highest bits of the message vector, without losing information by adding the error vector `e`.
+the scaling ensures that `m` is in the highest bits of the message vector, without losing information by adding the error vector `e`.
 
-Consequently, the message `m0` vector has each element module `p` (not `mod`), where `p < q`. The scaled message is now `m0_scaled = m0 * delta = m0 * mod / p`. The cipertext `c` is `B = A * s + e + m0_scaled`, which can be decrypted as `c = (B, A)`, *i.e.*, `m0 = (B - A * s) / delta = (delta * m0 + e) / delta`.
+consequently, the message `m0` vector has each element module `p` (not `mod`), where `p < q`. The scaled message is now `m0_scaled = m0 * delta = m0 * mod / p`. 
+
+the cipertext `c` is `B = A * s + e + m0_scaled`, which can be decrypted as `c = (B, A)`, *i.e.*, `m0 = (B - A * s) / delta = (delta * m0 + e) / delta`.
 
 
 <br>  
@@ -237,11 +256,11 @@ bound: [-4, 4]
 
 ----
 
-#### Proving that the secret key Regev encryption scheme supports additive homomorphism
+#### proving that the secret key Regev encryption scheme supports additive homomorphism
 
-Additive homomorphism means that if `c0` is the encryption of `m1` under secret key `s` and `c2` is the encryption of `m2` under the same secret key `s`, then `c0 + c1` is the encryption of `m0 + m1` under `s`.
+additive homomorphism means that if `c0` is the encryption of `m1` under secret key `s` and `c2` is the encryption of `m2` under the same secret key `s`, then `c0 + c1` is the encryption of `m0 + m1` under `s`.
 
-For a large number of `ci`, noise can be introduced from error, so the correctness of the results will depend on the values of `m, n, mod, and p`, such that
+for a large number of `ci`, noise can be introduced from error, so the correctness of the results will depend on the values of `m, n, mod, and p`, such that
 `|sum ei| < mod/(2p)`.
 
 
@@ -275,17 +294,17 @@ bound: [-4, 4]
 
 ----
 
-#### Proving that the secret key Regev encryption scheme supports plaintext inner product
+#### proving that the secret key Regev encryption scheme supports plaintext inner product
 
-This experiment shows that given a cipher `c` and a message vector `m0`, `c -> c1` can be transformed such that it also encrypts the **inner product** of `m0` with a plaintext vector `k` of size `m` and element modulo `p`.
+this experiment shows that given a cipher `c` and a message vector `m0`, `c -> c1` can be transformed such that it also encrypts the **inner product** of `m0` with a plaintext vector `k` of size `m` and element modulo `p`.
 
-Because of **noise growth** with the vector `k`, fine-tuning the initial parameters is crucial for the message to be successfully retrieved. More specifically, to guarantee correct decryption, the following must hold:
+because of **noise growth** with the vector `k`, fine-tuning the initial parameters is crucial for the message to be successfully retrieved. More specifically, to guarantee correct decryption, the following must hold:
 
 ```
 k * e0 < mod / (2 * p)
 ```
 
-Here is an example of a successful decryption:
+here is an example of a successful decryption:
 
 ```
 magick -i
@@ -315,7 +334,7 @@ bound: [-4, 4]
 ✨ Noise growth: 985
 ```
 
-Now, changing `MOD_P` from 10 to 100, we see a failed case:
+now, changing `MOD_P` from 10 to 100, we see a failed case:
 
 ```
 🚨 Original msg was not retrieved.
@@ -347,15 +366,15 @@ bound: [-4, 4]
 
 ----
 
-#### Run an intro tutorial on how PIR should work (without encryption)
+#### run an intro tutorial on how PIR should work (without encryption)
 
-In this experiment, we get the first taste of how PIR works, but without encryption yet.
+in this experiment, we get the first taste of how PIR works, but without encryption yet.
 
-We define our server's database as a square vector of size `m x m` with each entry module `p`. 
+we define our server's database as a square vector of size `m x m` with each entry module `p`. 
 
-We query a value at a specific row `r` and col `c` in plaintext, by creating a query vector of size `m x `` that is filled with `0`, with the exception of the desired column index `c`.
+we query a value at a specific row `r` and col `c` in plaintext, by creating a query vector of size `m x `` that is filled with `0`, with the exception of the desired column index `c`.
 
-We then show that computing the **dot product** of the database vector to the query vector will give a result vector with all rows in the column index `c`, where you can retrieve the row `r`.
+we then show that computing the **dot product** of the database vector to the query vector will give a result vector with all rows in the column index `c`, where you can retrieve the row `r`.
 
 ```
 magick -t
@@ -400,9 +419,9 @@ Vector: [237, 58, 40, 24, 351, 16, 454, 88, 461, 13, 318, 73, 260, 280, 196, 143
 
 ----
 
-#### Run a simple PIR experiment with secret key Regev encryption
+#### run a simple PIR experiment with secret key Regev encryption
 
-We are ready to run our first simple PIR experiment, where we build a query vector as in the previous experiment, but encrypt it using the secret key `s` from the Regev encryption scheme.
+we are ready to run our first simple PIR experiment, where we build a query vector as in the previous experiment, but encrypt it using the secret key `s` from the Regev encryption scheme.
 
 
 ```
@@ -482,31 +501,4 @@ Vector: [1, 1, 0, 1, 2, 0, 2, 0, 0, 1, 3, 1, 2, 3, 1, 3, 0, 1, 3, 1, 2, 3, 2, 2,
 
 ✨ Are they the same? Did we get a correct retrieval? True
 ```
-
-
-<br>
-
-----
-
-### What's next?
-
-There is a lot of work to be done and complex problems to be solved, and we do as we do everything else: humbly, diligently, one step at a time.
-
-<p align="center">
-<img src="https://github.com/privacy-scaling-explorations/pir-research/assets/1130416/c80a7438-e4c1-4b74-b0aa-8016dcfd150d" width="60%" align="center"/>
-</p>
-
-
-
-<br>
-
----
-
-### Acknowledgment 
-
-We would like to thank **[Alexandra Henzinger](https://github.com/ahenzinger/simplepir)** and **[@Janmajayamall](https://github.com/Janmajayamall)** for the seeds of this project.
-
-<br>
-
-◼️
 
