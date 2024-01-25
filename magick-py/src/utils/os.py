@@ -44,7 +44,6 @@ def load_config() -> dict:
         env_vars['p'] = os.getenv('MOD_P')
         env_vars['bound'] = os.getenv('BOUND')
         set_logging(os.getenv("LOG_LEVEL"))
-
         return env_vars
 
     except KeyError as e:

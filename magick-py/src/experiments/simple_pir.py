@@ -4,7 +4,7 @@
 
 from src.primitives.regev import Regev
 from src.primitives.message import Message
-from src.utils.os import exit_with_error, log_info, log_debug
+from src.utils.os import log_info, log_debug
 
 
 def no_encryption_example() -> None:
@@ -20,8 +20,8 @@ def no_encryption_example() -> None:
     log_debug('In this PIR tutorial, we represent a database as a square matrix, ' + 
         'where columns are the database entries and rows are the database attributes.')
     
-    log_debug('We intantiate the class Message(), creating a random database ' +
-                                  'with mod 500, and 20 entries and 20 attributes.\n')
+    log_debug('We start the class Message(), creating a random database ' +
+                    'with mod 500, and 20 entries and 20 attributes.\n')
 
     msg = Message()
     db = msg.create_random_message(500, 20, 20)
@@ -29,7 +29,7 @@ def no_encryption_example() -> None:
     log_debug(f'db: {db}\n')
 
     ########################################################################
-    # 2. Create some random query valye for row and column
+    # 2. Create some random query value for row and column
     ########################################################################
     log_debug('Now, let\'s create a random query value for row and column. ' +
                                             'Say, row 10 and column 10.')
@@ -75,7 +75,7 @@ def no_encryption_example() -> None:
 
 
 def secret_key_regev_example() -> None:
-    """Run a secret key regev encryption and decryption PIR experiment."""
+    """Run a secret key Regev encryption and decryption PIR experiment."""
     ########################################################################
     # 1. Represent a database as a square matrix, where the columns are 
     #    the database entries and the rows are the database attributes
@@ -114,7 +114,7 @@ def secret_key_regev_example() -> None:
     log_debug(f'query vector: {query.message}\n')
 
     ########################################################################
-    # 4. Encrypty query message vector
+    # 4. Encrypt query message vector
     ########################################################################
     log_debug('4. Let\'s encrypt the query message vector, calculating A and e.')
    
@@ -128,7 +128,7 @@ def secret_key_regev_example() -> None:
     ########################################################################
     # 5. Scale query vector by delta = mod / p and db vector from p to mod
     ########################################################################
-    log_debug('5. We scale the query vector by delta=mod/p and db vecto to 1/p')
+    log_debug('5. We scale the query vector by delta=mod/p and db vector to 1/p')
 
     scaled_query = query.calculate_scaling(regev.mod, regev.p, regev.mod)
     scaled_db = db.calculate_scaling(1, 1, regev.mod)

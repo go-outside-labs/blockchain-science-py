@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 # src/main.py
-# Entry point for magick-py, a set of 
-# libraries and experiments for pir.
+# by @bt3gl
 
 import argparse
 
@@ -14,7 +13,7 @@ import src.experiments.simple_encryption as simple_exp
 
 def run_menu() -> argparse.ArgumentParser:
 
-    parser = argparse.ArgumentParser(description='✨ Magick ✨')
+    parser = argparse.ArgumentParser(description='✨ Magick: PIR Experiment ✨')
     parser.add_argument('-e', dest='lre', action='store_true',
                         help="Run simple linear key Regev encryption experiment with sampled error. \
                         Example: magick -e")

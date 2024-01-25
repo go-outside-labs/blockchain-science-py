@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/experiments/simple_encryption.py
-# Experiment with secret key regev encryption.
+# Experiment with secret key Regev encryption.
 
 
 from src.primitives.regev import Regev
@@ -8,7 +8,7 @@ from src.primitives.regev import Regev
 
 def linear_secret_key_regev_encryption_with_error() -> None:
     """ 
-        This method runs a secret key regev encryption and decryption 
+        This method runs a secret key Regev encryption and decryption 
         experiment for a msg vector with a sampled error vector.
 
         In this simple example of learning with error (LWE), we operate
@@ -52,13 +52,13 @@ def linear_secret_key_regev_encryption_scaled() -> None:
 
         In this another simple example of learning with error (LWE), we loose
         information on least significant bits by adding noise, i.e., by scaling 
-        the message vector by delta = mod / p before addint it to encryption. 
+        the message vector by delta = mod / p before adding it to encryption. 
         Then, during the decryption, we scale the message vector by 1 / delta.
 
         The scaling ensures that m is in the highest bits of the message vector,
         without losing information with the addition of the error vector e.
 
-        Now, the message m0 vectir has each element module p (not mod), where
+        Now, the message m0 vector has each element module p (not mod), where
         p < q. The scaled message is now m0_scaled = m0 * delta = m0 * mod / p.
         The cipertext c is B = A * s + e + m0_scaled, which can be decrypted as
         c = (B, A), i.e., m0 = (B - A * s) / delta = (delta * m0 + e) / delta.

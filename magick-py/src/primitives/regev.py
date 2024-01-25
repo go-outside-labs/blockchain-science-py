@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 # src/lib/regev.py
-# Class for secret key regev encryption.
+# Class for secret key Regev encryption.
 
 
 from src.utils.os import load_config
-from src.utils.os import log_info, log_debug, log_error
+from src.utils.os import log_info, log_error
 from src.primitives.message import Message
 
 
@@ -99,7 +99,7 @@ class Regev():
         """
             Encrypt this message with a simple `B = A * s + e + m0`, 
             where `s` is the secret and `e` is the error vector.
-            Set the cypher as the tuple c = (B, A).
+            Set the cipher as the tuple c = (B, A).
         """
 
         B = (A * s) + e + m0

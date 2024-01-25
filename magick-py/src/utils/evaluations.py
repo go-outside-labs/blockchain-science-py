@@ -6,6 +6,6 @@
 import random
 
 def sample_error(bound):
-    """Sample an error givena its bound"""
+    """Sample an error given its bound"""
 
     return random.randint(- bound, + bound)

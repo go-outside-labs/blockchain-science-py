@@ -1,21 +1,20 @@
 # -*- encoding: utf-8 -*-
 # src/experiments/additive_homomorphism.py
-# Experiment with secret key regev encryption.
+# Experiment with secret key Regev encryption.
 
 
 from src.primitives.regev import Regev
-from src.utils.os import exit_with_error
 
 
 def additive_homomorphism() -> None:
     """ 
-        This method prooves that the secret key regev encryption scheme is
+        This method proves that the secret key Regev encryption scheme is
         additive homomorphic, i.e., if c0 encrypts m0 and c1 encrypts m1,
         both under s, then c0 + c1 decrypts to m0 + m1. 
     """
 
     ########################################################################
-    # 1. Key generation for two indepedent messages m0 and m1
+    # 1. Key generation for two independent messages m0 and m1
     ########################################################################
     
     r0 = Regev()
@@ -62,7 +61,7 @@ def additive_homomorphism() -> None:
 
 def plaintext_inner_product() -> None:
     """ 
-        This method proves that the secret key regev encryption scheme is
+        This method proves that the secret key Regev encryption scheme is
         supports plaintext inner product, i.e., if c0 encrypts m0 and c1
         encrypts m1, both under s, then c0 * c1 decrypts to m0 * m1.
     """
