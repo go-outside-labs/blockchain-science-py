@@ -6,6 +6,23 @@
 * **cli for single server PIR and LWE experiments in python, based on [*"simple and fast single-server private information retrieval"*,  by a. henzinger et al.](https://eprint.iacr.org/2022/949.pdf)**
 * **to learn more, check my [mirror write-up about this project](https://mirror.xyz/steinkirch.eth/4G5bsqUkjLxhQ0M9so3f25o4cABwN--tC40N3jkReug).**
 
+<br> 
+
+
+----
+
+### theoretical background
+
+<br>
+
+#### what’s PIR
+
+private information retrieval refers to the **ability to query a database without revealing which item is looked up or whether it exists**, by using cryptographic primitives. [b. chor et al.](https://www.wisdom.weizmann.ac.il/~oded/p_pir.html) first introduced the concept in 1995.
+
+PIR schemes are generally divided into **single-server schemes** and **multiple-server schemes** (which allows you to remove the trust from a subset of the servers).
+
+in this research, we will look at simple single-server PIR protocol setups, where a server holds an embedded database `D` represented by a `n x n` square matrix (whose elements are under a constant modulo), and a client wants to privately read the `ith` database item (`Di`, with `n` elements) without letting the server learn about `i`.
+
 <br>
 
 <p align="center">
@@ -15,80 +32,136 @@
 
 
 <br>
-<br> 
-
-
-----
-
-### intro to PIR
-
-private information retrieval (PIR) was first introduced in 1995 by **b. chor et al.** and refers to the ability to query a database without revealing which item is looked up or whether it exists, by using cryptography primitives.
-
-this is actually pretty cool, think about it: once PIR becomes less expensive or prohibitive (i.e., cheaper computation with a small cipher, as PIR inherently has a high cost for server-side computation), some of the possible fields and applications that could utilize the protocol are, for example, law enforcement, safe browsing, health providers, banks, stock exchanges…
-
-
-PIR schemes are generally divided into single-server schemes and multiple-server schemes (which allows you to remove the trust from a subset of the servers). we will only be looking at the first today. 
-
-our vanilla single-server PIR protocol setup is very simple: a server holds an embedded database `D` represented by a `n x n` square matrix (whose elements are under a constant modulo), and a client wants to privately read the `ith` database item (`Di`, with `n` elements) without letting the server learn about `i`.
-
-<br>
-
-### lattice-based cryptography
-
-**lattice-based cryptography** refers to a series of quantum-resistant cryptographic primitives that involve lattices, either in their construction or in the security proof.
-
-
-> 💡 *In group theory, a lattice in the R^n is an infinite set of points in this space in which coordinate-wise addition or subtraction of two points produces another point, so every point in the space is within some maximum distance of any lattice point. A lattice can also be described as a free abelian (commutative) group of dimension n, spanning the vector space R^n; or the symmetry group of a discrete translation symmetry in n directions.*
 
 
 <br>
 
-### homomorphic encryption
+#### homomorphic encryption schemes
 
-
-before we start, we need to review the concept of homomorphic encryption.
-
-imagine a server that can `XOR` some client’s data. the client would send their cipher `c0`, obtained from their plaintext data `m0` and their key `k0`:
+suppose a server that can `XOR` client’s data. the client would send their cipher `c0`, obtained from their plaintext data `m0` and their key `k0`:
 
 ```
 c = m0 ⌖ k0
 ```
 
-homomorphism is the property that if a client sends two encrypted messages, `c1` and `c2` (from messages `m0` and `m1`, respectively), the server can return `c1 ⌖ c2` so the client can retrieve `m0 ⌖ m1`.
+**homomorphism** is the property that if a client sends two encrypted messages, `c1` and `c2` (from messages `m0` and `m1`, respectively), the server can return `c1 ⌖ c2` so the client can retrieve `m0 ⌖ m1`.
 
-partially homomorphic encryption can be easily achieved as it can accept the possibility of not all the data being encrypted (or homomorphic) through other operations (such as multiplication).
+**additive homomorphism** occurs when, given two ciphertexts `(a0, c0)` and `(a1, c1)`, their sum `(a0 + a1, c0 + c1)` decrypts to the sum of the plaintexts (provided that the error remains sufficiently small).
 
-fully homomorphic encryption (FWE) is hard and it would be achieved if a server operated on encrypted data without seeing ANY content of the data.
+**partially homomorphic encryption** can be easily achieved as it accepts the possibility that not all data is encrypted (or homomorphic) through other operations (such as multiplication). 
 
-<br>
-
-> 💡 *in a more formal definition, homomorphic encryption is a form of encryption with evaluation capability for computing over encrypted data without access to the secret key, i.e., supporting arbitrary computation on ciphers. fully homomorphic encryption could be defined as the evaluation of arbitrary circuits of multiple types of (unbounded depth) gates (relevant to zero-knowledge proof setups).*
+**fully homomorphic encryption (FWE)**, which is much harder to achieve, would occur if a server operated on encrypted data **without seeing ANY of its content.**
 
 <br>
 
-### learning with errors (LWE)
-
-a subsequent important progress in the the field was a seminal  paper in 2005, where oded regev introduced the first lattice-based public-key encryption scheme, and the learning with errors (LWE) problem.
-
-the LWE problem can be thought of as a search in a (noisy) modular set of equations whose solutions can be very difficult to solve. in other words, given m samples of coefficients (bi, ai) in the linear equation bi = <ai, s> + ei, with the error ei sampled from a small range [-bound, bound], finding the secret key s is “hard”.
-
-in the past decades, regev's security proof and the LWE scheme's efficiency have been the subject of intense research among cryptographers, including craig gentry's thesis on the first fully homomorphic encryption scheme (2009).
+> 💡 *in a more formal definition, **homomorphic encryption** is a form of encryption with evaluation capability for computing over encrypted data without access to the secret key, i.e., supporting arbitrary computation on ciphers. **fully homomorphic encryption** could be said to be the evaluation of arbitrary circuits of multiple types of (unbounded depth) gates (relevant to zero-knowledge proof setups).*
 
 <br>
 
+#### learning with errors (LWE)
+
+PIR is also a subset of the broad topic of **lattice-based cryptography**. it refers to a series of **quantum-resistant cryptographic primitives** involving lattices, either in their construction or in the security proof.
+
+<br>
+
+> 💡 *over an n-dimensional vector space, a lattice is an infinite set of points represented by a collection of vectors.*
+
+<br>
+
+in a [2005 seminal PIR paper](https://dl.acm.org/doi/10.1145/1060590.1060603), oded regev introduced the **first lattice-based public-key encryption scheme** and the **learning with errors (LWE) problem**. 
+
+the LWE problem relies on the **hardness of distinguishing between a message with added noise and a random sample**. it can be thought of as **a search in a (noisy) modular set of equations whose solutions can be very difficult to solve**. in other words, given `m` samples of coefficients `(bi, ai)` in the linear equation `bi = <ai, s> + ei`, with the error `ei` sampled from a small range `[-bound, bound]`, finding the secret key `s` is "hard". 
+
+note, however, that LWE-based encryption schemes have a **significant drawback due to noise growth**. as the ciphertexts produced by these schemes are noisy encodings of the plaintext, **homomorphic operations between ciphertexts increase the magnitude of the noise**. if the noise exceeds a certain threshold, the correctness of the decryption may no longer hold. despite this problem, **regev encryption** can be very efficient for PIR as it is additively homomorphic.
+
+in the past decades, regev's security proof and the LWE scheme's efficiency have been the subject of intense research among cryptographers, including [craig gentry's thesis (2009)](https://crypto.stanford.edu/craig/craig-thesis.pdf), on the **first fully homomorphic encryption scheme**.
 
 
 <br>
 
-### single-server setup with a square matrix representation
+#### a simple implementation of the PIR protocol
 
-the basic gist of these experiments is:
+a PIR protocol aims to design **schemes that satisfy privacy and correctness constraints while achieving the minimum possible download cost**. 
 
-* our single-server database is represented by a square matrix (`n x n`)
-* our query is represented by a vector filled by `0s`, except at the asking row and column (`n x 1`)
-* the server retrieves the queried item by i) looping over every column and multiplying their values to the value in the same row of the query vector, and ii) adding the values found in each column in its own matrix.
-* the result should have the same dimension as the query vector (i.e., we reduce the space to the size of the column where the data is located).
-* finally, privacy is guaranteed by checking that fully homomorphic encryption is held with respect to addition in this setup (i.e. additive homomorphism).
+<br>
+
+> 💡 *rhe **download cost** of a PIR scheme is defined as **the total number of bits downloaded by the user from all the databases, normalized by the message size**. the **PIR rate** is defined as **the reciprocal of the PIR download cost**.*
+
+<br>
+
+one possible implementation approach is to choose a suitable polynomial and then have a single server preprocess the data. this preprocessing depends only on the database `D` and the public parameters of the regev encryption scheme, so that the server can reuse the work across many queries from many independent clients.
+
+after the preprocessing step, to answer a client's query, the server must compute only roughly `N 32-bit` integer multiplications and additions on a database of `N bytes`. the catch is that the client must download a *hint* matrix about the database contents after this preprocessing.
+
+therefore, a simple serve PIR scheme would comprise two phases:
+
+* **the offline phase**, with pre-computations and the exchange of *hints*, and
+
+* **the online phase**, with the query processing on the server and response decoding on the client.
+
+the practicality of PIR-based applications is primarily impacted by the query processing time and the hint exchange phase. the theoretical query size grows as the square root of the number of field elements representing the database. for example, the largest query size for a database of `32 GB` is around `600 KB`.
+
+
+<br>
+
+#### possible applications of PIR
+
+once PIR becomes less expensive or prohibitive (*i.e.*, cheaper computation with a small cipher, as PIR inherently has a high cost for server-side computation), these are some of the possible applications that could utilize the protocol:
+
+- **searching IP databases**: when filing a new IP, the author must search the IP database to check that no previous entry significantly overlaps with their invention. PIR could allow the search to be performed without leaving search terms on the query log of the IP database.
+
+- **real-time asset quotes**: investors interested in a particular asset often monitor the market to determine when to purchase. PIR could allow their interest to be confidential.
+
+- **safe browsing and private oracles, checking passwords over breached databases (or any type of credentials), certificate transparency (CT) checks, certificate revocation checks,** among many others.
+
+<br>
+
+#### why PIR is still not feasible
+
+although modern PIR schemes require surprisingly little communication and the protocol works well enough at smaller scales, the time needed to scan it grows proportionally as the database grows. for bigger databases, the process becomes prohibitively inefficient (fetching a database record grows only polylogarithmically with the number of records, `N`).
+
+after preprocessing the database, the server can answer a query in time sublinear in `N`. thus, the current hard limit on the throughput of PIR schemes is the ratio between the database size and the server time to answer a query (the speed with which the PIR server can read the database from memory).
+
+finally, it's important to note that PIR protocols do not ensure data integrity or authentication. an authenticated PIR scheme could combine an unauthenticated multi-server PIR scheme with a standard integrity-protection mechanism, such as merkle trees.
+
+in this approach, PIR servers download the data from the blockchain to construct PIR databases. dor each database, the PIR server creates a description file (usually called a *manifest file*). the user collects all available block headers and fetches the manifest files from the PIR servers to query the PIR database later efficiently.
+
+<br>
+
+---
+
+### ["simple and fast single-server private information retrieval", by alexandra henzinger et. al (2022)](https://eprint.iacr.org/2022/949) 
+
+<br>
+
+* this paper introduces a design for **SimplePIR**, **the fastest single-server PIR scheme known to date**.
+
+* the security holds under a **Learning with Errors scheme** that requires no polynomial arithmetic or fast fourier transforms. regev encryption gives a secret-key encryption scheme that is secure under the LWE assumption.
+
+* to answer a client’s query, the server performs fewer than **one 32-bit multiplication** and **one 32-bit addition** per **database byte**, achieving **10 GB/s/core server throughput**.
+
+* the first approach to **query a 1 GB database** demands the client to first download a **121 MB "hint" about the database contents**. then, the client can make any number of queries, each requiring **242 KB of communication**.
+
+* the second approach **shrinks the hint to 16 MB**. then, following queries demand **345 KB of communication**.
+
+* finally, the scheme is applied, together with a novel data structure for approximate set membership, to **private auditing in certificate transparency**. the results can be compared to google chrome’s current approach, with **16 MB of downloads per month, and 150 bytes per TLS connection**.
+
+
+<br>
+
+#### a server and a query in simplePIR
+
+
+in our code, the single-server database is represented by a square matrix `(m x m)`, while a query is a vector filled by `0s` except at the asking row and column `(m x 1)`. any result should have the same dimension as the query vector (*i.e.*, the space is reduced to the size of the column where the data is located).
+
+the server retrieves the queried item by:
+
+1. looping over every column and multiplying their values to the value in the same row of the query vector, and
+2. adding the values found in each column in its own matrix.
+
+a secret key regev encryption scheme using sampled errors to reproduce LWE is then built on top of the ideas above. privacy is guaranteed by checking that fully homomorphic encryption is held with respect to addition in this setup (*i.e.*, additive homomorphism).
+
+
 
 
 <br>
@@ -501,4 +574,20 @@ Vector: [1, 1, 0, 1, 2, 0, 2, 0, 0, 1, 3, 1, 2, 3, 1, 3, 0, 1, 3, 1, 2, 3, 2, 2,
 
 ✨ Are they the same? Did we get a correct retrieval? True
 ```
+
+<br>
+<br>
+
+----
+
+
+### references
+
+
+* **[private information retrieval and its applications, sajani vithana et al.](https://arxiv.org/pdf/2304.14397.pdf)**
+* **[practical private information retrieval, femi george olumofin](https://uwspace.uwaterloo.ca/bitstream/handle/10012/6142/Olumofin_Femi.pdf?sequence=1&isAllowed=y)**
+* **[how practical is single-server private information retrieval?, sophia artioli](https://ethz.ch/content/dam/ethz/special-interest/infk/inst-infsec/appliedcrypto/education/theses/How_practical_is_single_server_private_information_retrieval_corrected.pdf)**
+* **[applying private information retrieval to lightweight bitcoin clients, kaihua oin et al.](https://www.computer.org/csdl/proceedings-article/cvcbt/2019/366900a060/1cdOwKCMqXK)**
+
+
 
