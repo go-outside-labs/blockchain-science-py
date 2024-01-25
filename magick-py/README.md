@@ -85,7 +85,7 @@ a PIR protocol aims to design **schemes that satisfy privacy and correctness con
 
 <br>
 
-> 💡 *rhe **download cost** of a PIR scheme is defined as **the total number of bits downloaded by the user from all the databases, normalized by the message size**. the **PIR rate** is defined as **the reciprocal of the PIR download cost**.*
+> 💡 *the **download cost** of a PIR scheme is defined as **the total number of bits downloaded by the user from all the databases, normalized by the message size**. the **PIR rate** is defined as **the reciprocal of the PIR download cost**.*
 
 <br>
 
