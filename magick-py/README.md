@@ -54,7 +54,7 @@ c = m0 ⌖ k0
 
 <br>
 
-> 💡 *in a more formal definition, **homomorphic encryption** is a form of encryption with evaluation capability for computing over encrypted data without access to the secret key, i.e., supporting arbitrary computation on ciphers. **fully homomorphic encryption** could be said to be the evaluation of arbitrary circuits of multiple types of (unbounded depth) gates (relevant to zero-knowledge proof setups).*
+> 💡 *in a more formal definition, **homomorphic encryption** is a form of encryption with evaluation capability for computing over encrypted data without access to the secret key, i.e., supporting arbitrary computation on ciphers. **fully homomorphic encryption** could be said to be the evaluation of arbitrary circuits of multiple types of (unbounded depth) gates (relevant to zero-knowledge proof setups). also, check out [vitalik's post on the subject](https://vitalik.eth.limo/general/2020/07/20/homomorphic.html).*
 
 <br>
 
