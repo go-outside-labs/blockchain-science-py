@@ -17,7 +17,7 @@
 
 * `coitnbot` is a **CLI tool and a set of trading bots** that i’ve written to detect **profitable cryptocurrency pairs to be shorted or longed** on trading exchanges.
 * these statistical algorithmic strategies are named **cointegration**, which has been around for a long time, for either traditional or decentralized finances.
-* 📚 for more details, check **[my mirror post, bot #2: cointbot, a cointegration trader](https://mirror.xyz/steinkirch.eth/KQ0basHaclOCDDtOhz3NgKQhHdHqaqOtU89Sr4QO5L4)**.
+* 📚 for more details, check **[my mirror post, bot #2: cointbot, a cointegration trader](https://mirror.xyz/Mia Stein.eth/KQ0basHaclOCDDtOhz3NgKQhHdHqaqOtU89Sr4QO5L4)**.
 * 🚨 **disclaimer**: i open-source my projects because i am a believer in the oss ethos. you might or might not profit from it, but this is not my problem. in the mev world, nobody is going to (explicitly) handle you alphas. i am not responsible for anything you do with my free code.
 
 <br>

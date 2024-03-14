@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/markets/uniswapV3.py
-# author: steinkirch
+# author: Mia Stein
 # UniswapV3 API class.
 
 

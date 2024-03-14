@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/markets/curve.py
-# author: steinkirch
+# author: Mia Stein
 # Curve API class.
 
 

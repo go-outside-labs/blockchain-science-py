@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/markets/bitmex.py
-# author: steinkirch
+# author: Mia Stein
 # Bitmex API class.
 
 

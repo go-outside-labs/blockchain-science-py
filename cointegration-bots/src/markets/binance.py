@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/markets/binance.py
-# author: steinkirch
+# author: Mia Stein
 # Binance API class.
 
 

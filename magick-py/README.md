@@ -4,7 +4,7 @@
 <br>
 
 * **cli for single server PIR and LWE experiments in python, based on [*"simple and fast single-server private information retrieval"*,  by a. henzinger et al.](https://eprint.iacr.org/2022/949.pdf)**
-* **to learn more, check my [mirror write-up about this project](https://mirror.xyz/steinkirch.eth/4G5bsqUkjLxhQ0M9so3f25o4cABwN--tC40N3jkReug).**
+* **to learn more, check my [mirror write-up about this project](https://mirror.xyz/Mia Stein.eth/4G5bsqUkjLxhQ0M9so3f25o4cABwN--tC40N3jkReug).**
 
 <br> 
 

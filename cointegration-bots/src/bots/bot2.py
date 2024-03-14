@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/bots/bot2.py
-# author: steinkirch
+# author: Mia Stein
 # Class for trading bot2
 # 
 # TODO: https://github.com/go-outside-labs/blockchain-science-py/issues/30

@@ -2,7 +2,7 @@
 name = "fixed-computational-graph"
 version = "0.1.0"
 description="👾 Fixed Computational Graph Example 👾."
-authors=["bt3gl"]
+authors=["Mia Stein"]
 readme = "README.md"
 packages = [{include = "src"}]
 

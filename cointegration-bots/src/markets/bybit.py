@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/markets/bybit.py
-# author: steinkirch
+# author: Mia Stein
 # Bybit API class.
 
 import time

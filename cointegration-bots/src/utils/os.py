@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/utils/os.py
-# author: steinkirch
+# author: Mia Stein
 # Os utils methods.
 
 import os

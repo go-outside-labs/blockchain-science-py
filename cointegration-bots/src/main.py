@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 # src/main.py
-# author: steinkirch
+# author: Mia Stein
 # Entry point for cointbot.
 
 

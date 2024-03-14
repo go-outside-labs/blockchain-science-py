@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/utils/network.py
-# author: steinkirch
+# author: Mia Stein
 # Network utils methods.
 
 import json

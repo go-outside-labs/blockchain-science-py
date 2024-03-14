@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/bots/bot1.py
-# author: steinkirch
+# author: Mia Stein
 # Class for trading bot1.
 # 
 # Strategy:

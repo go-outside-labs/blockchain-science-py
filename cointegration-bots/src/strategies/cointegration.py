@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/strategies/cointegration.py
-# author: steinkirch
+# author: Mia Stein
 # Cointegration class.
 
 import math

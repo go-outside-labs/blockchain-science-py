@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # src/utils/plots.py
-# author: steinkirch
+# author: Mia Stein
 # Methods to plot data.
 
 import matplotlib.pyplot as plt

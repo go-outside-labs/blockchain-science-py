@@ -9,7 +9,7 @@ setup(
         'src.utils', 
         'src.strategies', 
         'src.bots']),
-    author="steinkirch",
+    author="Mia Stein",
     install_requires=['python-dotenv'],
     entry_points={
         'console_scripts': ['cointbot=src.main:run']

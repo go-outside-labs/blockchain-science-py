@@ -7,7 +7,7 @@ setup(
                     'src.experiments', \
                     'src.primitives', \
                     'src.utils']),
-    author="bt3gl",
+    author="Mia Stein",
     install_requires=['python-dotenv'],
     entry_points={
         'console_scripts': ['magick=src.main:run']

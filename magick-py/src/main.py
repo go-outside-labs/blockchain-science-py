@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 # src/main.py
-# by @bt3gl
+# by Mia Stein
 
 import argparse
 
