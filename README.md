@@ -95,7 +95,7 @@
 
 <br>
 
-* **[quantitative finance for cypherpunks, by go outside labs](https://github.com/go-outside-labs/quantitative-finance-for-cypherpunks)**
+
 * **[blockchain data engineering, by go outside labs](https://github.com/go-outside-labs/blockchain-data-engineering)**
 * **[cypherpunk toolkit, by go ouside labs](https://github.com/go-outside-labs/neo-cypherpunk-toolkit)**
 * **[crypto market data apis list](https://mixedanalytics.com/knowledge-base/top-free-crypto-apis/)**
