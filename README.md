@@ -34,13 +34,20 @@
 
 -----
 
-## my trading bots
+## my trading bots and strategies
 
 
 <br>
 
 * **[cointegration trading bots and CLI](cointegration-bots):**
   * run **highly customized** trading bots with **statistical algorithmic strategies** such as **cointegration**. Include an option for **docker deployment**.
+
+<br>
+
+* **[quantitative defi study](quantitative_defi):**
+  * a comprehensive study on data sources for quantitative defi, including **[yfinance](https://pypi.org/project/yfinance/), [panda_datareader](https://pandas-datareader.readthedocs.io/en/latest/), [alpha_advantage](https://www.alphavantage.co/), [CoinAPI](https://www.coinapi.io/),** and **[quandl](https://data.nasdaq.com/publishers/QDL)**.
+  * the data from every source is prepared, and then the **mean, skew, kurtosis, percentage change, and other statistics are calculated**.
+  * plots for **prices, return, and candles** for each data set.
 
 <br>
 
